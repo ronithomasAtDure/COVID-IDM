@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVID19 | About</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/iconly/bold.css') }}">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap-icons/bootstrap-icons.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/x-icon">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" />
+
+
+  <!--Plugin CSS file with desired skin-->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" />
+
+</head>
+
+<body>
+  <div id="app">
+    <div id="sidebar" class="active">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container-fluid ps-0 pe-0 text-light ">
+          <a class="navbar-brand d-flex pt-3" href="#">
+            <!-- <img src="{{ url_for('static', filename='images/covidlogo.png') }}" width="20%" alt="covid-logo" /> -->
+            <img class="icmr-logo pb-2" src="{{ url_for('static', filename='images/icmr.jpg') }}" alt="icmr-logo">
+            <h3 class="nav-title ms-2 pt-1 text-light d-sm-none d-lg-block">CHROMIC SIMULATOR <em>for</em> COVID 19
+            </h3>
+            <h3 class="nav-title-xs ms-2 text-light d-lg-none ">CHROMIC SIMULATOR</h3>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon">
+              <i class="fa fa-bars pt-1"></i>
+            </span>
+          </button>
+
+          <div class="collapse navbar-collapse justify-content-end ms-5 ps-5 pe-0" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto  ">
+              <li class="nav-item">
+                <a class="nav-link active text-light d-flex" href="#">
+                  <i class="fa fa-globe pt-1 pe-2" aria-hidden="true"></i>
+                  <span>About</span></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="fa fa-dashboard pt-1 pe-2 " aria-hidden="true"></i>
+                  <span>Simulator</span>
+                </a>
+  
+                <ul class="dropdown-menu" id="nav-dropdown" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/basic-dashboard/">Basic simulator</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="/advanced-dashboard/">Advanced simulator</a></li>
+                </ul>
+              </li>
+            
+              <li class="nav-item">
+                <a class="nav-link text-light d-flex" href="/">
+                  <i class="fa fa-sign-out pt-1 pe-2" aria-hidden="true"></i>
+                  <span>Log out</span></a>
+              </li>
+
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+
+    </div>
+
+  </div>
+  <div class="about-content container-fluid  pt-1">
+    <!-- partial:partials/_sidebar.html -->
+
+    <!-- partial -->
+    <!-- <h4 class=" text-dark mt-5 mb-4 text-center">
+            Welcome to the COVID-19 modelling tool
+          </h4> -->
+    <div class="main-panel mt-3">
+      <div class="content-wrapper mt-3 p-0-10px bg-white" id="about-para-1">
+
+
+        <h4 class="mt-2  mb-2"><span class="border-blue-dashed about-title">What are mathematical models?</span></h4>
+        <p class="text-dark fs-16px info">In the wake of the severe second wave of COVID-19 in India, there has been
+          widespread concern on the potential for a similarly severe third wave, and even for successive waves of
+          infection. <br>
+          While it is not possible to predict these outcomes with any detail, mathematical modelling can be a helpful
+          tool for exploring potential scenarios. <br>
+          A recent modelling analysis, published by ICMR, showed that if a third wave should occur, it is unlikely to be
+          as severe as the second, given the extent of spread that has already occurred (ref).
+          This study also examined some potential mechanisms through which a third wave could occur:</p>
+        <ul class="text-dark fs-16px info">
+          <li>Immunity to infection may be short-lived, allowing reinfection after a matter of months</li>
+          <li>A new variant may emerge, that is more transmissible than existing strains</li>
+          <li>A new variant may emerge, that can escape immunity to previous strains</li>
+          <li>In places where lockdowns have been successful at controlling transmission, the release of those lockdowns
+            could afford new opportunities for transmission.</li>
+        </ul>
+        <p class="text-dark fs-16px info"> This webtool allows the user to explore different scenarios for each of these
+          mechanisms.</p>
+
+
+
+      </div>
+
+      <div class="content-wrapper mt-3 p-0-10px bg-white" id="about-para-1">
+
+
+        <h4 class="mt-2  mb-2"><span class="border-blue-dashed about-title">Sample Simulation Image</span></h4>
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <img class="img-fluid" src="{{ url_for('static', filename='images/1.png') }}" alt="national level" />
+            <p class="text-center"><em>Fig.1 National Level (reproduction rate impact)</em></p>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <img class="img-fluid" src="{{ url_for('static', filename='images/2.png') }}" alt="national level" />
+            <p class="text-center"><em>Fig.2 National level (vaccine and without vaccine)</em></p>
+          </div>
+          <p class="text-center ">
+            <a id="form-button" class="btn btn-primary btn-sm ps-3 pe-3" href="/dashboard/" role="button">
+              <i class="fa fa-tachometer fs-12px pe-4"></i>
+              Simulator</a>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="content-wrapper bg-white mt-4" id="about-para-1">
+
+
+
+        <h4 class="  mt-2  mb-2"><span class="border-blue-dashed about-title">How can this tool be used?</span></h4>
+        <p class="text-dark fs-16px info">The ICMR study presented only a few illustrative scenarios, for each of the
+          mechanisms described above. However, for anyone using the results of this modelling, it is important to be
+          able to explore other possible scenarios as well. This webtool captures each of the mechanisms listed above,
+          and allows the user to generate scenarios with any combination of these mechanisms. For example, you might
+          explore the potential for third-wave variants to have higher or lower transmissibility, coupled with different
+          degrees of immune escape. <br>
+          For simplicity and usability, this tool is necessarily a simplified version of the published model. For any
+          more sophisticated scenarios, you are encouraged to get in touch with the authors of the original ICMR study.
+        </p>
+        <h4 class="  mt-2  mb-2"><span class="border-blue-dashed about-title">Model Parameters</span></h4>
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">Reproduction Rate (R<sub>0</sub>)</span></h5>
+        <p class="text-dark fs-16px info">
+          R<sub>0</sub> is the basic reproduction number, defined as the average number
+          of secondary cases caused by an infectious person, in an otherwise susceptible population. As
+          described below, default values are provided for R<sub>0</sub> in the first and second waves, consistent with
+          the epidemic at the country level. You are free to adjust these as you wish.
+          <br>
+        <ul class="text-dark fs-16px info">
+          <li>Suggested Low range (best-case scenario): 1 - 1.5. For example, the first wave in India had an
+            R<sub>0</sub> of
+            around 1.2.</li>
+          <li>Suggested Moderate range: 1.5 - 2.0.</li>
+          <li>Suggested High range (worst-case scenario): 2.0 and greater.</li>
+        </ul>
+        <!-- Bordered table start -->
+        <section class="section">
+          <!-- table bordered -->
+          <div class="table-responsive">
+            <table class="table table-bordered mb-0 text-dark" id="info">
+              <thead class="info-head">
+                <tr>
+                  <th>R<sub>0</sub> (Wave 1)</th>
+                  <th>R (Wave 2)</th>
+                  <th>R (Wave 3)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>At the national level, the country reached a seroprevalence of
+                    around 7.1% in mid-September 2020. This is best captured with an R<sub>0</sub> of 1.2. However,
+                    individual
+                    states may vary. Please enter the value of R<sub>0</sub> that best captures seroprevalence in your
+                    setting,
+                    as of mid-September 2020.</td>
+                  <td>At the national level, the peak of the second wave was 4 times
+                    higher than the peak of the first wave. This is best captured with an R of 2.2. However,
+                    individual states may vary. Please enter the value of R that best captures the relative
+                    heights
+                    of first and second waves in your setting.</td>
+                  <td>If a new variant emerges in future, and if it is more infectious
+                    than the delta variant, then R for the third wave will increase, relative to previous
+                    waves.
+                    Please enter a value of R, as a scenario for this virus. If you wish to model a virus
+                    with the
+                    same infectiousness as the delta variant, then you can use the same value of R as for
+                    the
+                    second
+                    wave.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Bordered table end -->
+        </p>
+
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">Duration of Immunity</span></h5>
+        <p class="text-dark fs-16px info">
+          If immunity of a population group against COVID-19 wanes, individual
+          members may still have some residual protection due to varying rate of
+          such decrease and trained arm of cellular immunity. Scenarios as extreme
+          as below could generate a third wave against this backdrop:
+        <ul class="text-dark fs-16px info">
+          <li>Suggested quick waning (worst-case scenario): 4 months to 1 year</li>
+
+          <li>Suggested waning over a moderate time period: 1 - 1.5 years</li>
+
+          <li>Suggested waning over a long period (best case scenario): 1.5 years
+            upwards</li>
+        </ul>
+        </p>
+        <p class="text-dark fs-16px info">
+          If no country/state/district specific data is available on waning period for
+          immunity – please leave this field blank.
+        </p>
+
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">Third wave Immune escape variant of SARS-CoV-2</h5>
+        <p class="text-dark fs-16px info">
+          Emergence of a variants with its ability to fully escape previous immunity
+          have been considered although in reality this is going to be an extreme
+          scenario. Please enter the proportion of previously infected people turning
+          fully susceptible due to reinfection with the newly emerging variant.
+        <ul class="text-dark fs-16px info">
+          <li>Suggested Low escape (best-case scenario): 0 - 5%.</li>
+          <li>Suggested Moderate escape: 5 - 15%.</li>
+          <li>Suggested High escape (worst-case scenario): >15% and greater</li>
+        </ul>
+        </p>
+        <p class="text-dark fs-16px info">
+          If INSACOG has not reported emergence of an immune escape variant till
+          date, as relevant to a country/state/district, please leave the field blank.
+        </p>
+
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">What was the date of the first peak?</h5>
+        <p class="text-dark fs-16px info">
+          At the national level, the first peak occurred in mid-September 2020. Timings may vary in different states.
+        </p>
+
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">Date of emergence of a future variant</h5>
+        <p class="text-dark fs-16px info">
+          A future variant could either be more infectious/transmissible (“R for wave
+          3”, see above) or show immune escape (“Third wave immune escape”, see
+          above), please enter the date on which such a variant was reported to be
+          detected in the population. <br>
+          If no report is available on emergence on of a new variant, which is more
+          transmissible than the one, responsible for the second wave, please leave
+          this field blank. <br>
+          If no report is available on emergence of a new variant, which has the
+          ability of escaping immunity, please leave this field blank.
+        </p>
+
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">Effectiveness of the lockdown</h5>
+        <p class="text-dark fs-16px info">
+          Please note that an effective lockdown will change the behaviour of the second wave. Depending on your choice
+          of effectiveness, you may need to adjust R<sub>0</sub> for the second wave (see above) in order to maintain
+          the correct
+          ratio between first and second wave peak heights.
+        </p>
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">Population Covered</h5>
+        <p class="text-dark fs-16px info">
+          In this time, percent of those over 24 years old receiving both doses of vaccine
+        </p>
+
+        <h5 class="  mt-2  mb-2"><span class="border-blue-dashed">Simulated Seroprevalence</h5>
+        <p class="text-dark fs-16px info">
+          At the national level, the second seroprevalence survey found a seroprevalence of around 7% in early September
+          2020. This value may vary in different states.
+        </p>
+
+        <p>
+          <a id="form-button" class="btn btn-primary btn-sm"
+            href="https://www.ijmr.org.in/preprintarticle.asp?id=319408;type=0" target="_blank" role="button"><i
+              class="fa fa-paperclip fs-12px"></i> Reference Paper</a>
+          <a id="form-button" class="btn btn-primary btn-sm" href="/dashboard/" role="button"><i
+              class="fa fa-tachometer fs-12px"></i>
+            Simulator</a>
+          <a id="form-button" class="btn btn-primary btn-sm" href="{{ url_for('static', filename = 'sirmodel.py') }}"
+            download="Code" role="button" onclick="return false;"><i class="fa fa-download fs-12px"></i> Download Model
+            Source Code</a>
+        </p>
+
+      </div>
+      <div class="content-wrapper p-0-10px bg-white mt-4 mb-5" id="about-para-1">
+
+
+
+
+        <h4 class="  mt-2  mb-2"><span class="border-blue-dashed about-title">Limitations of mathematical model</span>
+        </h4>
+        <p class="text-dark fs-16px info">All mathematical models are subject to limitations. Models do not predict
+          future
+          outcomes, and always rely on data. Nonetheless, models can also be helpful tools for guiding our thinking.
+          Based on the same mathematical model as used in (ref), this webtool allows users with minimal experience to
+          interact with this framework.</p>
+
+
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+      <footer class="footer fixed-bottom" id="footer-about">
+        <div class="foo-main  pt-2 ps-3 pe-3 pb-2">
+          <div class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021. All rights
+            reserved.</div>
+          <div class="text-muted text-center text-sm-right d-block d-sm-inline-block">
+            <img class="dure-logo" src="{{ url_for('static', filename='images/dure.png') }}" alt="dure-logo">
+          </div>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+
+  <script src="{{ url_for('static', filename='vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+
+  <script src="{{ url_for('static', filename='vendors/apexcharts/apexcharts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>
+
+  <!--jQuery-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!--Plugin JavaScript file-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+    integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+
+</body>
+
+</html>

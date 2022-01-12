@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVID19 | Seroprevalence Table</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/iconly/bold.css') }}">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap-icons/bootstrap-icons.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/x-icon">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" />
+
+
+  <!--Plugin CSS file with desired skin-->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" />
+
+</head>
+
+<body>
+  <div id="app">
+    <div id="sidebar" class="active">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container-fluid ps-0 pe-0 text-light ">
+          <a class="navbar-brand d-flex pt-3" href="#">
+            <!-- <img src="{{ url_for('static', filename='images/covidlogo.png') }}" width="20%" alt="covid-logo" /> -->
+            <img class="icmr-logo pb-2" src="{{ url_for('static', filename='images/icmr.jpg') }}" alt="icmr-logo">
+            <h3 class="nav-title ms-2 pt-1 text-light d-sm-none d-lg-block">CHROMIC SIMULATOR <em>for</em> COVID 19
+            </h3>
+            <h3 class="nav-title-xs ms-2 text-light d-lg-none ">COVID19 IDM 3</h3>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon">
+              <i class="fa fa-bars pt-1"></i>
+            </span>
+          </button>
+
+          <div class="collapse navbar-collapse justify-content-end ms-5 ps-5 pe-0" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto  ">
+              <li class="nav-item">
+                <a class="nav-link active text-light d-flex" href="#">
+                  <i class="fa fa-globe pt-1 pe-2" aria-hidden="true"></i>
+                  <span>About</span></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="fa fa-dashboard pt-1 pe-2 " aria-hidden="true"></i>
+                  <span>Simulator</span>
+                </a>
+  
+                <ul class="dropdown-menu" id="nav-dropdown" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/basic-dashboard/">Basic simulator</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="/advanced-dashboard/">Advanced simulator</a></li>
+                </ul>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link text-light d-flex" href="/">
+                  <i class="fa fa-sign-out pt-1 pe-2" aria-hidden="true"></i>
+                  <span>Log out</span></a>
+              </li>
+
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+
+    </div>
+
+  </div>
+  <div class="about-content container-fluid  pt-1">
+    <!-- partial:partials/_sidebar.html -->
+
+    <!-- partial -->
+    <!-- <h4 class=" text-dark mt-5 mb-4 text-center">
+            Welcome to the COVID-19 modelling tool
+          </h4> -->
+    <div class="main-panel mt-3">
+      <div class="content-wrapper mt-3 p-0-10px bg-white" id="about-para-1">
+
+
+        <!-- Bordered table start -->
+ <!-- Bordered table start -->
+ <section class="sero-section pt-2">
+  <div class="row" id="table-bordered">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <button class="back-btn ps-0" onclick="goBack()"><i class="fa fa-arrow-left pe-2"></i>Back to
+            Simulator</button>
+          <h4 class="  mt-2  mb-2"><span class="border-blue-dashed about-title">Seroprevalence to R<sub>0</sub>
+              Relation</span></h4>
+        </div>
+        <div class="card-content" id="table-center">
+          <!-- table bordered -->
+          <div class="table-responsive">
+            <table class="table table-bordered mb-0 r0-table" id="r0-table">
+              <thead>
+                <tr>
+                  <th width="250px">R<sub>0</sub></th>
+                  <th>% Seroprevalence at the peak</th>
+                  <th>% Seroprevalence 15 days prior to the peak</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r0, peak, dayprior in r0s | zip(peaks, daysprior) %}
+                <tr>
+                  <td class="text-bold-500">{{r0}}</td>
+                  <td class="text-bold-500">{{peak}}</td>
+                  <td class="text-bold-500">{{dayprior}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Bordered table end -->
+<!-- Bordered table end -->
+
+
+
+      </div>
+
+    </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+      <footer class="footer fixed-bottom" id="footer-about">
+        <div class="foo-main  pt-2 ps-3 pe-3 pb-2">
+          <div class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021. All rights
+            reserved.</div>
+          <div class="text-muted text-center text-sm-right d-block d-sm-inline-block">
+            <img class="dure-logo" src="{{ url_for('static', filename='images/dure.png') }}" alt="dure-logo">
+          </div>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+
+  <script src="{{ url_for('static', filename='vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+
+  <script src="{{ url_for('static', filename='vendors/apexcharts/apexcharts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>
+
+  <!--jQuery-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!--Plugin JavaScript file-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+    integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+
+</body>
+
+</html>

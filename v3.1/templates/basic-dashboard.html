@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVID19 IDM | Simulator</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/iconly/bold.css') }}">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap-icons/bootstrap-icons.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/x-icon">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" />
+
+
+  <!--Plugin CSS file with desired skin-->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" />
+
+</head>
+
+<body>
+  <div id="app">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container-fluid ps-0 pe-0 text-light ">
+        <a class="navbar-brand d-flex" href="#">
+          <!-- <img src="{{ url_for('static', filename='images/covidlogo.png') }}" width="50%" alt="covid-logo" /> -->
+          <img class="icmr-logo pb-2" src="{{ url_for('static', filename='images/icmr.jpg') }}" alt="icmr-logo">
+          <h3 class="nav-title ms-2 pt-1 text-light d-sm-none d-lg-block">CHROMIC SIMULATOR <em>for</em> COVID 19
+          </h3>
+          <h3 class="nav-title-xs ms-2 text-light d-lg-none ">CHROMIC SIMULATOR</h3>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon">
+            <i class="fa fa-bars pt-1"></i>
+          </span>
+        </button>
+        <!-- <div class="icmr">
+          <img class="icmr-logo" src="{{ url_for('static', filename='images/icmr.png') }}" alt="icmr-logo">
+        </div> -->
+        <div class="collapse navbar-collapse justify-content-end  ms-5 ps-5 pe-0" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto  ">
+            <!-- <li class="nav-item">
+              <input type="button" onclick="printDiv('printableArea')" value="print" />
+            </li> -->
+
+            <li class="nav-item">
+              <a class="nav-link  d-flex" href="/about/">
+                <i class="fa fa-globe pt-1 pe-2" aria-hidden="true"></i>
+                <span>About</span></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa fa-dashboard pt-1 pe-2 " aria-hidden="true"></i>
+                <span>Simulator</span>
+              </a>
+
+              <ul class="dropdown-menu" id="nav-dropdown" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Basic simulator</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="/advanced-dashboard/">Advanced simulator</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  d-flex" onclick="printPDF()" href="#">
+                <i class="fa fa-print pt-1 pe-2" aria-hidden="true"></i>
+                <span>Print</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  d-flex" href="/">
+                <i class="fa fa-sign-out pt-1 pe-2" aria-hidden="true"></i>
+                <span>Log out</span></a>
+            </li>
+
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+    <div id="sidebar" class="active">
+
+      <div class="slimScrollDiv sidebar-wrapper active">
+        <form action="/basic-dashboard/" method="POST" class="form form-vertical hbar">
+          <div class="sidebar-header ms-0 me-0 pt-0 pb-0 pe-0 ps-0 d-xl-none d-block">
+            <div class="button-close">
+
+              <div class="toggler">
+                <a href="#" class="sidebar-hide  d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="sidebar-menu mt-3">
+
+
+
+            <h5 class="ms-3 mb-2">Natural History & Demographic Parameters </h5>
+            <div class="form-no-1">
+              <!-- <div class="input-group mb-1 me-3 ms-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Location Name</span>
+                <input type="text" name="place" value="{{ place }}" class="form-control me-5" id="place">
+              </div> -->
+
+              <div class="form-group ms-lg-4 ms-1  mt-2 pt-2 row mb-1 mb-xl-3 sliderContainer">
+
+                <label for="inputhwa" class="col-sm-7 col-form-label">Reproduction Rate (R<sub>0</sub>)
+
+                  <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                  <div class="hide" id="hidden-text">R<sub>0</sub> is the basic reproduction number, defined as the
+                    average number
+                    of secondary cases caused by an infectious person, in an otherwise susceptible population. As
+                    described below, default values are provided for R<sub>0</sub> in the first and second waves,
+                    consistent with
+                    the epidemic at the country level. You are free to adjust these as you wish.
+                    <br><br>
+                    <ul>
+                      <li>Suggested Low range (best-case scenario): 1 - 1.5. For example, the first wave in India had an
+                        R<sub>0</sub> of
+                        around 1.2.</li>
+                      <li>Suggested Moderate range: 1.5 - 2.0.</li>
+                      <li>Suggested High range (worst-case scenario): 2.0 and greater.</li>
+                    </ul>
+                  </div>
+                  <br /><a href="/seroprevalence-table/"><small>Click for Seroprevalence Table</small></a>
+                </label>
+                <div class="row ms-0 ps-0 sliderContainer">
+                  <label for="inputhbc" class="col-sm-4 pe-0 col-form-label">R<sub>0</sub>(Wave 1):
+                    <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                    <div class="hide" id="hidden-text">At the national level, the country reached a seroprevalence of
+                      around 7.1% in mid-September 2020. This is best captured with an R<sub>0</sub> of 1.2. However,
+                      individual
+                      states may vary. Please enter the value of R<sub>0</sub> that best captures seroprevalence in your
+                      setting,
+                      as of mid-September 2020.
+                    </div>
+
+                  </label>
+
+                  <div class="col-sm-4 ps-2 pe-4">
+
+                    <input name="r1" min="1.02" type="number" value="{{r1}}" max="6" class="form-control sliderval"
+                      id="inputhb1" step="0.001">
+
+
+                  </div>
+                  <div class="col-sm-3 ps-0 pe-0">
+                    <input type="text" class="form-control inputslider" id="inputhb1slider" placeholder="Slider">
+                  </div>
+                </div>
+                <div class="row mt-2 ms-0 ps-0 sliderContainer">
+                  <label for="inputhbc" class="col-sm-4 pe-0 col-form-label">R (Wave 2):
+                    <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                    <div class="hide" id="hidden-text">At the national level, the peak of the second wave was 4 times
+                      higher than the peak of the first wave. This is best captured with an R of 2.2.
+                      However,
+                      individual states may vary. Please enter the value of R that best captures the
+                      relative heights
+                      of first and second waves in your setting.
+                    </div>
+                  </label>
+                  <div class="col-sm-4 ps-2 pe-4">
+
+                    <input name="r2" min="1.02" type="number" value="{{r2}}" max="6" class="form-control sliderval"
+                      id="inputhb2" step="0.001">
+
+
+                  </div>
+                  <div class="col-sm-3 ps-0 pe-0">
+                    <input type="text" class="form-control inputslider" id="inputhb2slider" placeholder="Slider">
+                  </div>
+                </div>
+                <div class="row mt-2 ms-0 ps-0 sliderContainer">
+                  <label for="inputhbc" class="col-sm-4 pe-0 col-form-label">R (Wave 3):
+                    <!-- <br /><small>default R<sub>0</sub>Wave2 </small> -->
+                    <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                    <div class="hide" id="hidden-text">If a new variant emerges in future, and if it is more infectious
+                      than the delta variant, then R for the third wave will increase, relative to previous
+                      waves.
+                      Please enter a value of R, as a scenario for this virus. If you wish to model a virus
+                      with the
+                      same infectiousness as the delta variant, then you can use the same value of R as for
+                      the second
+                      wave.
+                    </div>
+                  </label>
+                  <div class="col-sm-4 ps-2 pe-4">
+
+                    <input name="r3" min="1.02" type="number" value="{{r3}}" max="6" class="form-control sliderval"
+                      id="inputhb3" step="0.001">
+
+
+                  </div>
+                  <div class="col-sm-3 ps-0 pe-0">
+                    <input type="text" class="form-control inputslider" id="inputhb3slider" placeholder="Slider">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group ms-lg-4 ms-1  mt-2 pt-2 row mb-1 mb-xl-3 sliderContainer hide">
+                <label for="inputhbc" class="col-sm-6 col-form-label ">Population size :</label>
+                <div class="col-sm-5">
+                  {% if popsize %}
+                  <input name="popsize" type="number" value="{{popsize}}" max="2000000" class="form-control sliderval"
+                    id="inputhpop">
+                  {% else %}
+                  <input name="popsize" type="number" value="1000000" max="2000000" class="form-control sliderval"
+                    id="inputhpop">
+                  {% endif %}
+                </div>
+                <div class="col-sm-11 mt-3">
+                  <input name="popsize" type="text" class="form-control inputslider" id="inputhpopslider"
+                    placeholder="Slider">
+                </div>
+              </div>
+
+              <div class="form-group ms-lg-4 ms-1 row mt-1 mb-1 mb-xl-3 sliderContainer hide">
+                <label for="wanning"> <input type="checkbox" id="wanning" name="wanning" value="checked" {{check}}>
+                  Include Waning of Immunity</label>
+
+                <br>
+
+                <div class="answer">
+                  <div class="wainput d-flex">
+                    <label for="inputhwa" class="col-sm-7 col-form-label ms-3">Duration of Immunity:
+
+                      <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                      <div class="hide" id="hidden-text">
+                        If immunity of a population group against COVID-19 wanes, individual
+                        members may still have some residual protection due to varying rate of
+                        such decrease and trained arm of cellular immunity. Scenarios as extreme
+                        as below could generate a third wave against this backdrop:
+                        <ul>
+                          <li>Suggested quick waning (worst-case scenario): 4 months to 1 year</li>
+
+                          <li>Suggested waning over a moderate time period: 1 - 1.5 years</li>
+
+                          <li>Suggested waning over a long period (best case scenario): 1.5 years
+                            upwards</li>
+                        </ul>
+                        If no country/state/district specific data is available on waning period for
+                        immunity – please leave this field blank.
+                      </div><br /><small>(in
+                        month)</small>
+                    </label>
+                    <div class="col-sm-4 pe-4">
+                      <input type="number" value="{{wa}}" max="24" class="form-control sliderval" id="inputhwa" name=wa>
+                    </div>
+                  </div>
+                  <div class="col-sm-11 ps-3">
+                    <input type="text" class="form-control inputslider" id="inputhwaslider" placeholder="Slider"
+                      name=wa>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer hide">
+              <label for="inputhie" class="col-sm-7 col-form-label">Third wave immune escape (%) :
+                <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                <div class="hide" id="hidden-text">
+                  Emergence of a variants with its ability to fully escape previous immunity
+                  have been considered although in reality this is going to be an extreme
+                  scenario. Please enter the proportion of previously infected people turning
+                  fully susceptible due to reinfection with the newly emerging variant.
+                  <ul>
+                    <li>Suggested Low escape (best-case scenario): 0 - 5%.</li>
+                    <li>Suggested Moderate escape: 5 - 15%.</li>
+                    <li>Suggested High escape (worst-case scenario): >15% and greater</li>
+                  </ul>
+                  If INSACOG has not reported emergence of an immune escape variant till
+                  date, as relevant to a country/state/district, please leave the field blank.
+                </div>
+                <!-- <br /><small>in Months</small> -->
+              </label>
+              <div class="col-sm-4">
+                <input name="thie" type="number" value="{{thie}}" max="100" class="form-control sliderval" id="inputhie"
+                  step="0.01">
+              </div>
+              <div class="col-sm-11 mt-2">
+                <input name="thie" type="text" class="form-control inputslider" id="inputhieslider"
+                  placeholder="Slider">
+              </div>
+            </div>
+            <!-- <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+                <label for="inputhtp" class="col-sm-7 col-form-label"> Ratio between the two peaks :</label>
+                <div class="col-sm-4">
+                  <input name="r2p" type="number" value="4" max="6" step="0.001" class="form-control sliderval"
+                    id="inputhtp">
+                </div>
+                <div class="col-sm-11 mt-2">
+                  <input name="r2p" type="text" class="form-control inputslider" id="inputhtpslider"
+                    placeholder="Slider">
+                </div>
+              </div>
+              <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+                <label for="inputhsp" class="col-sm-7 col-form-label"> Seroprevalence(%) :</label>
+                <div class="col-sm-4">
+                  <input name="sterilePrev" type="number" value="7.1" max="100" step="0.01"
+                    class="form-control sliderval" id="inputhsp">
+                </div>
+                <div class="col-sm-11">
+                  <input name="sterilePrev" type="text" class="form-control inputslider" id="inputhspslider"
+                    placeholder="Slider">
+                </div>
+              </div>
+              <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+                <label for="inputhdtp" class="col-sm-7 col-form-label"> Duration between the two peaks (Days) :</label>
+                <div class="col-sm-4">
+                  <input name="d2p" type="number" value="232" max="500" class="form-control sliderval" id="inputhdtp">
+                </div>
+                <div class="col-sm-11">
+                  <input name="d2p" type="text" class="form-control inputslider" id="inputhdtpslider"
+                    placeholder="Slider">
+                </div>
+              </div> -->
+            <div class="form-group ms-lg-4 ms-1 mt-1 row mb-1 mb-xl-3 sliderContainer">
+              <label for="inputfpd" class="col-sm-5 col-form-label">What was the date of the first peak?
+                <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                <div class="hide" id="hidden-text">At the national level, the first peak occurred in mid-September 2020.
+                  Timings may vary in different states.</div>
+              </label>
+              <div class="col-sm-6 mb-2">
+                <div class="input-group mt-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                  </div>
+                  <input type="text" value="{{FirstPeaktDate}}" class="form-control fpd" id="inputfpd"
+                    name="FirstPeaktDate">
+                </div>
+              </div>
+              <div class="hide">
+                <label for="inputfvd" class="col-sm-5 col-form-label">Date of emergence of a future variant
+                  <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                  <div class="hide" id="hidden-text">
+                    A future variant could either be more infectious/transmissible
+                    (“R for wave
+                    3”, see above) or show immune escape (“Third wave immune escape”, see
+
+                    above), please enter the date on which such a variant was reported to be
+                    detected in the population. <br>
+                    If no report is available on emergence on of a new variant, which is more
+                    transmissible than the one, responsible for the second wave, please leave
+                    this field blank. <br>
+                    If no report is available on emergence of a new variant, which has the
+                    ability of escaping immunity, please leave this field blank.</div>
+                  <br /><small>Transmission efficient/ Immune escape ability</small>
+                </label>
+                <div class="col-sm-6 mb-2 mt-4">
+                  <div class="input-group ">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                    </div>
+                    <input type="text" value="{{ThirdWaveEmergenceDate}}" class="form-control fvd" id="inputfvd"
+                      name="ThirdWaveEmergenceDate">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ms-lg-4 ms-1 row mt-1 mb-1 mb-xl-3 sliderContainer">
+              <label for="popden"> <input type="checkbox" id="popden" name="checkpop" value="checked" {{checkpop}}>
+                Temporary population increase after the second wave?
+                <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                <div class="hide" id="hidden-text">As popular holiday destinations, certain states may have seen an
+                  influx of travel from other states following the second wave of COVID-19. If the resulting expansion
+                  in state population is significant, please enter that parameter here.
+                </div>
+              </label>
+
+              <br>
+
+              <div class="answer-1 ps-">
+                <div class="popinput d-flex">
+                  <label for="inputpd" class="col-sm-7 col-form-label"> Increase in Population Density (%) :
+
+                  </label>
+                  <div class="col-sm-4 pe-2">
+                    <input type="number" value="{{popdens}}" max="200" step="0.01" class="form-control sliderval"
+                      id="inputpd" name=popdens>
+                  </div>
+                </div>
+                <div class="col-sm-11 pe-2 pt-2">
+                  <input type="text" class="form-control inputslider" id="inputpdslider" placeholder="Slider"
+                    name=popdens>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+                <label for="inputhwa" class="col-sm-3 col-form-label">D<sub>1</sub> :
+                  <br /><small>in Months</small>
+                </label>
+                <div class="col-sm-4 ps-1 pe-3">
+                  {% if d1 %}
+                  <input type="number" value="{{d1}}" max="100" class="form-control sliderval" id="inputhd1" name="d1">
+                  {% else %}
+                  <input type="number" value="0" max="100" class="form-control sliderval" id="inputhd1" name="d1">
+                  {% endif %}
+                </div>
+                <div class="col-sm-4 ps-2">
+                  <input type="text" class="form-control inputslider" id="inputhd1slider" placeholder="Slider"
+                    name="d1">
+                </div>
+              </div>
+              <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+                <label for="inputhwa" class="col-sm-3 col-form-label">D<sub>2</sub> :
+                  <br /><small>in Months</small>
+                </label>
+                <div class="col-sm-4 ps-1 pe-3">
+                  {% if d2 %}
+                  <input type="number" value="{{d2}}" max="100" class="form-control sliderval" id="inputhd2" name="d2">
+                  {% else %}
+                  <input type="number" value="0" max="100" class="form-control sliderval" id="inputhd2" name="d2">
+                  {% endif %}
+                </div>
+                <div class="col-sm-4 ps-2">
+                  <input type="text" class="form-control inputslider" id="inputhd2slider" placeholder="Slider"
+                    name="d2">
+                </div>
+              </div> -->
+          </div>
+          <hr>
+          <h5 class="ms-3 mb-2">Restriction scenarios</h5>
+          <div class="form-no-2">
+            <!-- <label  class="col-sm-6 col-form-label ms-4"> Lockdown scenarios</label> -->
+            <div class="form-group ms-lg-4 ms-1 mt-1 row mb-1 mb-xl-3 sliderContainer">
+              <label for="inputsd" class="col-sm-5 col-form-label">Restriction Start Date :</label>
+              <div class="col-sm-6 mb-2">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                  </div>
+                  <input type="text" value="{{LockdownStartDate}}" class="form-control sd" id="inputsd"
+                    name="LockdownStartDate">
+                </div>
+              </div>
+            </div>
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+              <label for="inputed" class="col-sm-5 col-form-label">Restriction End Date :</label>
+              <div class="col-sm-6 mb-2">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                  </div>
+                  <input type="text" value="{{LockdownEndDate}}" class="form-control ed" id="inputed"
+                    name="LockdownEndDate">
+                </div>
+              </div>
+            </div>
+            <!-- <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+                <label for="inputhld" class="col-sm-7 col-form-label">Lockdown Days :
+                  <sup><i class="fa fa-question-circle-o" aria-hidden="true" data-toggle="tooltip"
+                      data-placement="bottom" title="Days Between 2nd Wave end and lockdown start"></i></sup> <br />
+                </label>
+                <div class="col-sm-4">
+                  <input name="lckDays" type="number" value="0" max="365" class="form-control sliderval" id="inputhld">
+                </div>
+                <div class="col-sm-11">
+                  <input name="lckDays" type="text" class="form-control inputslider" id="inputhldslider"
+                    placeholder="Slider">
+                </div>
+              </div> -->
+
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer hide">
+              <label for="inputhel" class="col-sm-7 col-form-label">Effectiveness of the lockdown :
+                <br />( in %) <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                <div class="hide" id="hidden-text">Please note that an effective lockdown will change the behaviour of
+                  the second wave. Depending on your choice of effectiveness, you may need to adjust R0 for the second
+                  wave (see above) in order to maintain the correct ratio between first and second wave peak heights.
+                </div>
+                <br /><small>in Reducing Transmission</small>
+              </label>
+              <div class="col-sm-4">
+                <input name="" type="number" value="" max="100" step="0.01" class="form-control sliderval"
+                  id="inputhel">
+              </div>
+              <div class="col-sm-11">
+                <input name="" type="text" class="form-control inputslider" id="inputhelslider" placeholder="Slider">
+              </div>
+            </div>
+
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+              <label for="inputhel" class="col-sm-11 col-form-label">Effectiveness of Restrictive Measures:
+                <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                <div class="hide" id="hidden-text">Please note that the restrictive measures will change the behaviour
+                  of
+                  the second wave. Depending on your choice of effectiveness, you may need to adjust R for the second
+                  wave (see above) in order to maintain the correct ratio between first and second wave peak heights.
+                </div>
+
+              </label>
+              <div class="col-sm-11">
+                <select class="form-select form-select-md mb-3" name="effLck" aria-label=".form-select-md example">
+                  <option {{effLck[0]}} value="0">No measures</option>
+                  <option {{effLck[1]}} value="30">Night Curfew</option>
+                  <option {{effLck[2]}} value="40">Night Curfew & Weekend Curfew</option>
+                  <option {{effLck[3]}} value="60">Night Curfew & Halfday Curfew</option>
+                  <option {{effLck[4]}} value="80">Full Day & Night Restriction</option>
+                </select>
+              </div>
+
+            </div>
+
+          </div>
+          <hr>
+          <h5 class="ms-3 mb-2">Vaccination scenarios</h5>
+          <div class="form-no-3">
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer hide">
+              <label for="inputed" class="col-sm-5 col-form-label">Vaccination Start Date :</label>
+              <div class="col-sm-6 mb-2">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                  </div>
+                  <input type="text" value="{{VaccStartDate}}" class="form-control vsd" id="inputvsd"
+                    name="VaccStartDate">
+                </div>
+              </div>
+            </div>
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer hide">
+              <label for="inputhvr" class="col-sm-8 col-form-label">Vaccination Effectiveness :</label>
+              <div class="col-sm-3">
+                <input name="vaccRate" type="number" value="{{vaccEff}}" max="100" step="0.01"
+                  class="form-control sliderval" id="inputhvr">
+              </div>
+              <div class="col-sm-11 mt-1">
+                <input name="vaccRate" type="text" class="form-control inputslider" id="inputhvrslider"
+                  placeholder="Slider">
+              </div>
+            </div>
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+              <label for="inputhvd" class="col-sm-8 col-form-label">Vaccination Duration : <br> <small>(in
+                  months)</small>:</label>
+              <div class="col-sm-3">
+                <input name="vaccDays" type="number" value="{{vaccDays}}" max="12" class="form-control sliderval"
+                  id="inputhvd">
+              </div>
+              <div class="col-sm-11 mt-1">
+                <input name="vaccDays" type="text" class="form-control inputslider" id="inputhvdslider"
+                  placeholder="Slider">
+              </div>
+            </div>
+            <div class="form-group ms-lg-4 ms-1 row mb-1 mb-xl-3 sliderContainer">
+              <label for="inputhpc" class="col-sm-8 col-form-label">Population Covered (Full Dose)
+                <sup class="myDIV"><i class="fa fa-question-circle-o"></i></sup>
+                <div class="hide" id="hidden-text">In this time, percent of those over 24 years old receiving both doses
+                  of vaccine
+                </div>
+              </label>
+              <div class="col-sm-3">
+                <input name="vaccCover" type="number" value="{{vaccCover}}" max="100" step="0.01"
+                  class="form-control sliderval" id="inputhpc">
+              </div>
+              <div class="col-sm-11 mt-2">
+                <input name="vaccCover" type="text" class="form-control inputslider" id="inputhpcslider"
+                  placeholder="Slider">
+              </div>
+            </div>
+          </div>
+          <!-- <div class="sidenav-btn row ms-4 mt-3  pb-5 text-center">
+                    <div class="col-md-12">
+                      
+                      <button type="submit" class="btn btn-primary mr-2 w-fit-content" id="submitBtn">Simulate</button>
+                      <button type="reset" class="btn btn-light w-fit-content">Reset</button>
+                    </div>
+    
+                  </div> -->
+          <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+          <div class="sidenav-btn row ms-lg-4 ms-1 mt-4 ps-4 pt-3 pb-3 d-lg-none d-sm-block">
+            <div class="col-md-4 d-flex  mt-3">
+
+              <button type="submit" id="form-button" class="btn btn-primary pe-5 ps-5 mt-1 me-1">Simulate</button>
+              <button type="submit" id="form-button" class="btn bg-light pe-5 ps-5 ms-2"><a href="/dashboard/">
+                  Reset</a></button>
+            </div>
+
+          </div>
+      </div>
+      <div class="sidenav-btn row ms-lg-4 ms-1 mt-4 ps-4 pt-3 pb-3 fixed-bottom d-sm-none d-lg-block">
+        <div class="col-md-4 d-flex  mt-3">
+
+          <button type="submit" id="form-button" class="btn btn-primary pe-5 ps-5 mt-1 me-1 mb-1">Simulate</button>
+          <button type="reset" id="form-button" class="btn btn-outline-secondary pe-5 ps-5 mt-1 me-1 mb-1"><a
+              href="/dashboard/">
+              Reset</a></button>
+        </div>
+
+      </div>
+    </div>
+    </form>
+  </div>
+  <div id="main" class="main-content">
+    <header class="mb-3 d-lg-none d-xl-none">
+      <a href="#" class="burger-btn d-block d-xl-none">
+        <i class="bi bi-justify fs-3"></i>
+      </a>
+    </header>
+
+
+    <div class="page-content">
+
+      <div class="bs-example {{waMsg}}">
+        <!-- Wrapping element -->
+        <div style="position: relative;">
+          <!-- Position toasts -->
+          <div style="position: absolute; top: 35px; right: 0; width: 200px;z-index: 100;">
+            <div class="toast fade show text-white">
+              <div class="toast-header d-flex justify-content-between">
+                <strong class="mr-auto text-white"><i class="fa fa-info-circle pe-2"></i>Wanning Message</strong>
+                <button type="button" id="closebutton" class="ml-2 mb-1 close"
+                  onclick="$(this).parent().parent().hide();" data-dismiss="toast">
+                  <i class="fa fa-times text-white"></i></button>
+              </div>
+              <div class="toast-body">
+                <strong>R<sub>0</sub> Wa value is too low</strong>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="row" id="printableArea">
+        <div class="col-lg-8 col-xs-12 col-sm-12">
+          <!-- <div class="alert alert-success" role="alert">
+                  {{message}}
+                </div> -->
+          <div class="card " id="chart-card">
+            <div class="card-header pb-0">
+              <h5>Simulated multi-wave dynamics of COVID-19</h5>
+            </div>
+
+            <div class="card-body pt-0" id="plotly">
+              <!-- <figure class="highcharts-figure"> -->
+              <!-- <div id="container-1"></div> -->
+              <div id="chart" class="chart">
+
+              </div>
+              <!-- </figure> -->
+
+            </div>
+          </div>
+          <div class="sero p-1">
+            <label class="simulate-label">Simulated Seroprevalence {{recoveryCases}}% as of {{seroDate}}
+              <sup class="myDIV-1"><i class="fa fa-question-circle-o"></i></sup>
+              <div class="hide-1" id="hidden-text-1">At the national level, the second seroprevalence survey found a
+                seroprevalence of around 7% in early September 2020. This value may vary in different states.</div>
+            </label>
+          </div>
+          <div class="prediction  d-lg-none">
+            {% if wavestatus==0 %}
+            <div class="thirdwave p-1 mt-4" style="background-color: #3bb691; color: #fff">Third Wave is not predicted
+              {% else %}
+              <div class="thirdwave p-1 mt-4" style="background-color: #ff7976; color:#ffff;"> Third
+                Wave Predicted
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="d-sm-block d-lg-none pt-3 pb-3 ps-2" id="results-data">
+                <div class="row">
+                  <div class="col-12 mb-1">
+                    <div class="sero p-1">
+                      <label>Simulated Seroprevalence {{recoveryCases}}% as of {{seroDate}}
+                        <sup class="myDIV-1"><i class="fa fa-question-circle-o"></i></sup>
+                        <div class="hide-1" id="hidden-text-1">At the national level, the second seroprevalence survey found a
+                          seroprevalence of around 7% in early September 2020. This value may vary in different states.</div>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-12 mt-4">
+                    {% if wavestatus==0 %}
+                    <div class="thirdwave p-1" style="background-color: #3bb691; color: #fff">Third Wave is not predicted
+                      {% else %}
+                      <div class="thirdwave p-1" style="background-color: #ff7976; color:#ffff;"> Third
+                        Wave Predicted
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               
+               
+              </div> -->
+
+
+          <div class="main-table col-lg-4 col-xs-12 col-sm-12">
+            <!-- Bordered table start -->
+            <section class="section">
+              <div class="row" id="table-bordered">
+                <div class="col-12">
+                  <div class="card" id="chart-table">
+                    <div class="card-header">
+                      <h5 class="card-title" id="table-title">Peak Healthcare demand for <br> 3<sup>rd</sup>
+                        wave scenarios <br>(per
+                        million population)</h5>
+                    </div>
+                    <div class="card-content">
+                      <!-- table bordered -->
+                      <div class="table-responsive">
+                        <table class="table" id="peak-table">
+                          <thead class="peak-head">
+                            <tr class="text-center">
+                              <th class="pt-3 pb-3" rowspan="2">Among <br> Symptomatic <br> Cases</th>
+                              <th class="pt-3 pb-3" colspan="3" scope="colgroup">Age Groups (Years)</th>
+                              <th class="pt-3 pb-3" rowspan="2">Total</th>
+                            </tr>
+                            <tr>
+                              <th scope="col" class="pt-3 pb-3">
+                                <18 </th>
+                              <th scope="col" class="pt-3 pb-3">19-60 </th>
+                              <th scope="col" class="pt-3 pb-3">>60 </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td class="text-bold-500 pt-3 pb-3">Needing <br> Hospitalization
+                              </td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[0]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[1]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[2]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[9]}}</td>
+                            </tr>
+                            <tr>
+                              <td class="text-bold-500 pt-3 pb-3">Needing <br> Oxygen</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[3]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[4]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[5]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[10]}}</td>
+                            </tr>
+                            <tr>
+                              <td class="text-bold-500 pt-3 pb-3">Needing <br> Ventilator</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[6]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[7]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[8]}}</td>
+                              <td class="pt-3 pb-3" style="text-align: center">{{preparedness[11]}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                {% if wavestatus==0 %}
+                <div class="thirdwave-1 p-1" style="background-color: #3bb691; color: #fff">Third Wave is not predicted
+                  {% else %}
+                  <div class="thirdwave-1 p-1" style="background-color: #ff7976; color:#ffff;"> Third
+                    Wave Predicted
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+            </section>
+
+            <!-- Bordered table end -->
+          </div>
+
+          <!-- <div class="d-flex justify-content-between fixed-bottom  pt-3 pb-3 ps-2" id="results-data">
+              <div class="sero p-1 col-5">
+                <label>Simulated Seroprevalence {{recoveryCases}}% as of {{seroDate}}
+                  <sup class="myDIV-1"><i class="fa fa-question-circle-o"></i></sup>
+                  <div class="hide-1" id="hidden-text-1">At the national level, the second seroprevalence survey found a
+                    seroprevalence of around 7% in early September 2020. This value may vary in different states.</div>
+                </label>
+              </div>
+              {% if wavestatus==0 %}
+              <div class="thirdwave p-1 col-3" style="background-color: #3bb691; color: #fff">Third Wave is not predicted
+                {% else %}
+                <div class="thirdwave p-1 col-3" style="background-color: #ff7976; color:#ffff;"> Third
+                  Wave Predicted
+                  {% endif %}
+                </div>
+              </div>
+            </div> -->
+
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+    <footer class="footer fixed-bottom" id="footer-about">
+      <div class="foo-main  pt-2 ps-3 pe-3 pb-2">
+        <div class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021. All rights
+          reserved.</div>
+        <div class="text-muted text-center text-sm-right d-block d-sm-inline-block">
+          <img class="dure-logo" src="{{ url_for('static', filename='images/dure.png') }}" alt="dure-logo">
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="text/javascript">
+    var graphs = {{ graphJSON | safe}};
+    Plotly.plot('chart', graphs, {});
+  </script>
+
+  <script src="{{ url_for('static', filename='vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+
+  <script src="{{ url_for('static', filename='vendors/apexcharts/apexcharts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script>
+
+  <!--jQuery-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!--Plugin JavaScript file-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+    integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/series-label.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+  <script src="{{ url_for('static', filename='js/jspdf.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/html2canvas.min.js') }}"></script>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+</body>
+
+</html>
