@@ -1,0 +1,8 @@
+Input,Derive,,,,R1,,,,SWS_date,R2,Duration_Peak,Ratio
+sero wave 1,7.1,ok,R0(wave1),1.169,R2,,,,,,,
+FWP_date,9/16/2020,,,,Duration,SWP-FWP,5.5,,,,,
+FWP_cases,100,,,,Ratio,SWP/FWP,4,,,,,
+SWP_date,5/6/2021,,,,,,,,,,,
+SWP_cases,400,,,,,,,,,,,
+,,,,,,,,,,,,
+R3,default R2,,,,,,,,,,,
