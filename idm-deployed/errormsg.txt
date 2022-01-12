@@ -1,0 +1,36 @@
+Input validation:
+
+second peak date <= first peak date
+Please check the entered Peak dates
+
+future variant date <= future variant defaultdate (default date, 2021-08-31)
+Please check the input values
+
+
+restrictive measure end date <= restrictive measure start date
+restrictive measure start date !== "" && restrictive measure end date == ""
+restrictive measure start date == "" && restrictive measure end date !== ""
+Please check the entered Restriction dates
+
+restrictive measure start date == "" && restrictive measure end date == "" && restrictive measure > 0
+Please enter Restriction date or keep the restrictive mesaures as 0
+
+vaccine coverage > 0 && vaccine duration == 0.0
+Please enter Vaccinaton Duration to achieve the coverage
+
+transmissibility > 0 && future variant date == ""
+Please check the input values
+
+third wave immune escape > 0 && future variant date == ""
+Please check the input values
+
+
+Model Execution message:
+Please wait while calibrating, the model (usually takes approx. 1 min)
+
+
+Sero Alert:
+Seroprevalence Value is too high/low to calibrate. Please adjust seroprevalence value.
+
+For any Internal Error:
+Please check the input values

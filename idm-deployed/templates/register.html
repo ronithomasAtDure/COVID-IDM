@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID19 IDM | Register</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/iconly/bold.css') }}">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap-icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/x-icon">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+        integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" />
+
+
+    <!--Plugin CSS file with desired skin-->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" />
+
+</head>
+
+<body>
+
+    <div id="app">
+
+        <section>
+            <div class="container">
+
+
+                <div class="row mt-5 mb-5 match-height">
+
+                    <div class="col-md-6 offset-md-3">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <img src="{{ url_for('static', filename='images/covidlogo.png') }}" width="20%"
+                                    alt="covid-logo" />
+                                <h3 class="mt-2 ms-2 text-center">CHROMIC <br> </h3>
+                                <h3 class="mt-2 ms-2 text-center"> SIMULATOR for COVID 19</h3>
+                                <h6>User Registration</h6>
+                            </div>
+                            <div class="card-content ">
+                                <div class="card-body login-form">
+                                    <form action="/register/" method="POST" class="form form-vertical">
+                                        <div class="form-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <label for="first-name-icon">Name</label>
+                                                        <div class="position-relative mt-2">
+                                                            <input type="text" class="form-control" placeholder="Name"
+                                                                name="name" id="first-name-icon" required>
+                                                            <div class="form-control-icon">
+                                                                <i class="fa fa-user pb-2"></i></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <label for="first-name-icon">Organization Name</label>
+                                                        <div class="position-relative mt-2">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Organization Name" name="orgname"
+                                                                id="first-name-icon" required>
+                                                            <div class="form-control-icon">
+                                                                <i class="fa fa-building pb-2"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <label for="first-name-icon">Email</label>
+                                                        <div class="position-relative mt-2">
+                                                            <input type="text" class="form-control" placeholder="Email"
+                                                                name="email" id="first-name-icon" required>
+                                                            <div class="form-control-icon">
+                                                                <i class="fa fa-envelope pb-2"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <label for="first-name-icon">Username</label>
+                                                        <div class="position-relative mt-2">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Username" name="username"
+                                                                id="first-name-icon" required>
+                                                            <div class="form-control-icon">
+                                                                <i class="fa fa-user pb-2"></i></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <label for="password-id-icon">Password</label>
+                                                        <div class="position-relative mt-2">
+                                                            <input type="password" class="form-control" name="password"
+                                                                placeholder="Password" id="password-id-icon" required>
+                                                            <div class="form-control-icon">
+                                                                <i class="fa fa-lock pb-2"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <label for="password-id-icon">Confirm Password</label>
+                                                        <div class="position-relative mt-2">
+                                                            <input type="password" class="form-control"
+                                                                placeholder="Confirm Password" id="password-id-icon"
+                                                                required>
+                                                            <div class="form-control-icon">
+                                                                <i class="fa fa-lock pb-2"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mb-2">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label text-muted">
+                                                            <input type="checkbox" class="form-check-input" value="1"
+                                                                name="termsAgreed" required>
+                                                            I agree to all Terms & Conditions
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 text-center d-flex justify-content-center">
+                                                    <button type="submit"
+                                                        class="btn btn-primary pe-5 ps-5 mt-1 me-1 mb-1">Signup</button>
+
+                                                </div>
+                                                <div class="col-12 mt-2 text-center mb-3 font-weight-light">
+                                                    Already have an account? <a href="/" class="text-primary">Login</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer fixed-bottom" id="footer-about">
+            <div class="foo-main  pt-2 ps-3 pe-3 pb-2">
+                <div class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021. All rights
+                    reserved.</div>
+                <div class="text-muted text-center text-sm-right d-block d-sm-inline-block">
+                    <a href="https://www.duretechnologies.com" target="_blank">
+                        <img class="dure-logo" src="{{ url_for('static', filename='images/dure.png') }}"
+                            alt="dure-logo">
+                    </a>
+                </div>
+            </div>
+        </footer>
+        <!-- partial -->
+
+        <!-- main-panel ends -->
+    </div>
+    <script src="{{ url_for('static', filename='vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script> -->
+
+    <!-- <script src="{{ url_for('static', filename='vendors/apexcharts/apexcharts.js') }}"></script> -->
+    <!-- <script src="{{ url_for('static', filename='js/pages/dashboard.js') }}"></script> -->
+
+    <!--jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!--Plugin JavaScript file-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+        integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
+
+    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
+    <!-- <script src="{{ url_for('static', filename='js/form.js') }}"></script> -->
+
+</body>
+
+</html>
