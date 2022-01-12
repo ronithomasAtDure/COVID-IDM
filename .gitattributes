@@ -1,0 +1,7 @@
+v3.1/ filter=lfs diff=lfs merge=lfs -text
+v2.1/ filter=lfs diff=lfs merge=lfs -text
+v1/ filter=lfs diff=lfs merge=lfs -text
+idm-deployed/ filter=lfs diff=lfs merge=lfs -text
+v3.1/env export-ignore 
+v2.1/env export-ignore
+v1/env export-ignore
