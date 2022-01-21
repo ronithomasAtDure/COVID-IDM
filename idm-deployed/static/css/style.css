@@ -308,6 +308,15 @@ h5, .card-header{
     color: #435ebe;
 }
 
+h6{
+    color: #435ebe;
+}
+
+.tablealert{
+    font-size: 1rem;
+    color: #ff7976;
+}
+
 #form-button {
     font-size: 17px;
 }
@@ -695,4 +704,22 @@ and (max-width: 1280px){
 @keyframes progressAnimation {
     0% {width: 0%;}
     100%{width: 100%;}
+}
+
+@media screen and (min-device-width: 1024px){
+    #peak-table{
+       
+        margin-top: 0;
+        margin-bottom: 0;
+       
+    }
+}
+
+@media screen and (min-device-width: 1366px){
+    #peak-table{
+       
+        margin-top: 0;
+        margin-bottom: 0;
+       
+    }
 }

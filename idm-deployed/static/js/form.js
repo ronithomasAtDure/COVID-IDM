@@ -260,7 +260,7 @@ class form {
       min: 0,
       grid: false,
       step: 0.01,
-      max: 1,
+      max: 100,
       from: document.getElementById('inpuproportionOxygen').value,
       onChange: function (data) {
         that.fillSliderinputVal(data)
@@ -270,7 +270,7 @@ class form {
       min: 0,
       grid: false,
       step: 0.01,
-      max: 1,
+      max: 100,
       from: document.getElementById('inpuproportionHospital').value,
       onChange: function (data) {
         that.fillSliderinputVal(data)
@@ -292,6 +292,16 @@ class form {
       step: 0.001,
       max: 100,
       from: document.getElementById('inputhsp').value,
+      onChange: function (data) {
+        that.fillSliderinputVal(data)
+      },
+    });
+    $("#inputpdslider").ionRangeSlider({
+      min: 0,
+      grid: false,
+      step: 0.01,
+      max: 100,
+      from: document.getElementById('inputpd').value,
       onChange: function (data) {
         that.fillSliderinputVal(data)
       },

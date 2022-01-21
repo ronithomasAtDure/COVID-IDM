@@ -24,8 +24,9 @@ def plot(place, seropeak, FirstPeaktDate,  fCases, SecondPeaktDate, sCases,
         "Restriction Start Date":LockdownStartDate, "Restriction End Date":LockdownEndDate,
         "Restrictive Measures":str(rm*100)+"%",
         "Increase in Population":str(popdens*100)+"%", "Vaccine Coverage (Full Dose)":str(vaccCover*100)+"%", "Waning Duration":int(wa/30),
-        "Date of Future Variant":ThirdWaveEmergenceDate, "Increase in Transmissibility":str(trans*100)+"%", "Immune Escape":str(thie*100)+"%"
+        "Date of Future Variant":ThirdWaveEmergenceDate, "Increase in Transmissibility":str(trans*100)+"%", "Immune Escape":str(round(thie*100, 2))+"%"
     }
+    print(values["Immune Escape"])
     
     ValuesPlot=[]
     for k,v in values.items():
@@ -37,6 +38,7 @@ def plot(place, seropeak, FirstPeaktDate,  fCases, SecondPeaktDate, sCases,
             continue
         else:
            ValuesPlot.append("%s: %s" % (k,v))
+    print(ValuesPlot)
 
     #Calling tehe createoutputjson function
     plotData,R1_cases,R1_index,all_end_index,preparedness, seromsg = createoutputjson(seropeak, FirstPeaktDate,  fCases, SecondPeaktDate, sCases,
@@ -58,15 +60,23 @@ def plot(place, seropeak, FirstPeaktDate,  fCases, SecondPeaktDate, sCases,
         #Plot for Non-Vaccine scenario
         if vaccDays == 0.0:
             c_diff, date = plotData[0]['no_intervention_c_diff'], plotData[0]['date']
-            
+            ca_diff = plotData[0]['no_intervention_c_ca_diff']
+            hospital_c = plotData[0]['Hospital_c']
+
             #DF for the plot
             df = pd.DataFrame({
             "Time (Days)": date[:len(c_diff)],
-            "Daily symptomatic cases (numbers/million)": [int(item) for item in c_diff]
+            "Daily cases (numbers/million)": [int(item) for item in c_diff],
+            "CA_diff": [int(item) for item in ca_diff],
+            "Hospital_c": [int(item) for item in hospital_c],
                 })
     
             #Ploting the data
-            fig = px.line(df, x="Time (Days)", y="Daily symptomatic cases (numbers/million)", height=500)
+            fig = px.line(df, x="Time (Days)", y="Daily cases (numbers/million)", height=500)
+            fig.add_scatter(x=df['Time (Days)'], y=df['CA_diff'], mode='lines', line_color="maroon", name="Total Cases")
+            fig.add_scatter(x=df['Time (Days)'], y=df['Daily cases (numbers/million)'], mode='lines', line_color="#636efa", name="Symptomatic")
+            fig.add_scatter(x=df['Time (Days)'], y=df['Hospital_c'], mode='lines', line_color="#ff7f0e", name="Needing<br>hospitalisation")
+
             fig.update_yaxes(tickfont_family="Roboto Medium")
     
             #Limit X-axis scale quarterly
@@ -81,12 +91,12 @@ def plot(place, seropeak, FirstPeaktDate,  fCases, SecondPeaktDate, sCases,
             df = pd.DataFrame({
             "Time (Days)": date[:lim],
             "Daily symptomatic With Vaccine cases (numbers/million)": [int(item) for item in ct_diff[:lim]],
-            "Daily symptomatic Vaccine cases (numbers/million)": [int(item) for item in ct0_diff[:lim]]
+            "Daily symptomatic cases (numbers/million)": [int(item) for item in ct0_diff[:lim]]
                 })
     
-            fig = px.line(df, x="Time (Days)", y="Daily symptomatic Vaccine cases (numbers/million)", height=500)
+            fig = px.line(df, x="Time (Days)", y="Daily symptomatic cases (numbers/million)", height=500)
             fig.add_scatter(x=df['Time (Days)'], y=df['Daily symptomatic With Vaccine cases (numbers/million)'], mode='lines', line_color="#ef553b", name="Vaccine")
-            fig.add_scatter(x=df['Time (Days)'], y=df['Daily symptomatic Vaccine cases (numbers/million)'], mode='lines', line_color="#636efa", name="No Vaccine")
+            fig.add_scatter(x=df['Time (Days)'], y=df['Daily symptomatic cases (numbers/million)'], mode='lines', line_color="#636efa", name="No Vaccine")
             fig.update_yaxes(tickfont_family="Roboto Medium")
             fig.update_xaxes(
                 dtick="M3",
@@ -290,8 +300,8 @@ def advanced_dashboard():
         rm = 0 if request.form['rm'] == "" else float(request.form['rm'])/100
         vaccDays = 0 if request.form['vaccDays'] == "" else float(request.form['vaccDays'])*30
         vaccCover = 0.0 if request.form['vaccCover'] == "" else float(request.form['vaccCover'])/100
-        proportionHospital = float(request.form['proportionHospital'])
-        proportionOxygen = float(request.form['proportionOxygen'])
+        proportionHospital = float(request.form['proportionHospital'])/100
+        proportionOxygen = float(request.form['proportionOxygen'])/100
         try: homecare = request.form['homecare']
         except: homecare = None
         print(proportionHospital, proportionOxygen, homecare)
@@ -316,8 +326,8 @@ def advanced_dashboard():
         return render_template("advanced.html", graphJSON=graphJSON, place=place,
                         seropeak=seropeak, FirstPeaktDate=FirstPeaktDate, fCases=fCases, SecondPeaktDate=SecondPeaktDate, sCases=sCases, check=check, wa=wa/30,
                         LockdownStartDate=LockdownStartDate, LockdownEndDate=LockdownEndDate, rm=rm*100,
-                        ThirdWaveEmergenceDate=ThirdWaveEmergenceDate, trans=trans*100, checktrans=checktrans, thie=thie*100,checkpop=checkpop, popdens=popdens*100,
-                        vaccDays=vaccDays/30, vaccCover=vaccCover*100, checkadvanced = checkadvanced, proportionHospital = proportionHospital, proportionOxygen = proportionOxygen, homecare = homecare,
+                        ThirdWaveEmergenceDate=ThirdWaveEmergenceDate, trans=trans*100, checktrans=checktrans, thie=round(thie*100, 2),checkpop=checkpop, popdens=popdens*100,
+                        vaccDays=vaccDays/30, vaccCover=vaccCover*100, checkadvanced = checkadvanced, proportionHospital = proportionHospital*100, proportionOxygen = proportionOxygen*100, homecare = homecare,
                         preparedness=preparedness, wavestatus=wavestatus, seroAlert=seroAlert, fvalert=fvalert, fvalertmsg=fvalertmsg)
 
     else:
@@ -325,9 +335,9 @@ def advanced_dashboard():
         return render_template("advanced.html", graphJSON=default.graphJSON, place=default.place,
                         seropeak=default.seropeak, FirstPeaktDate=default.FirstPeaktDate, fCases=default.fCases, SecondPeaktDate=default.SecondPeaktDate, sCases=default.sCases,  wa=default.wa/30,
                         LockdownStartDate=default.LockdownStartDate, LockdownEndDate=default.LockdownEndDate, rm=default.rm,
-                        ThirdWaveEmergenceDate=default.ThirdWaveEmergenceDate, trans=default.trans, checktrans=default.checktrans, thie=default.thie*100, popdens=default.popdens*100,
+                        ThirdWaveEmergenceDate=default.ThirdWaveEmergenceDate, trans=default.trans, checktrans=default.checktrans, thie=round(default.thie*100, 2), popdens=default.popdens*100,
                         vaccDays=default.vaccDays/30, vaccCover=default.vaccCover*100, seroAlert=default.seroAlert, fvalert=fvalert, fvalertmsg=fvalertmsg,
-                        proportionHospital = default.proportionHospital, proportionOxygen = default.proportionOxygen, homecare = default.homecare, preparedness=default.preparedness, wavestatus=default.wavestatus)
+                        proportionHospital = default.proportionHospital*100, proportionOxygen = default.proportionOxygen*100, homecare = default.homecare, preparedness=default.preparedness, wavestatus=default.wavestatus)
 
 
 ### ABOUT ###

@@ -31,32 +31,52 @@ class CovidApp:
         scenario_dict = dict()  
         preparedness_list=[] 
         # preparedness_precent=[0.05,0.05,0.25,0.17,0.40,0.60,0.24,0.12,0.12]
-        preparedness_precent=[0.05,0.05,0.25,0.217,0.415,0.621,0.237,0.129,0.142]
+        preparedness_precent=[0.05,0.15,0.25,0.217,0.415,0.621,0.237,0.129,0.142]
         Cv_effectiveness_percent=(1-0.6)
          
         ##################  Without vaccination- S,R, C_diff component to dictionary ###############################################
         
-        if len(intervention_state_df.columns)<=9:        
+        if len(intervention_state_df.columns)<=10:        
             scenario_dict['t'] = (intervention_state_df.t[3]).tolist()
             scenario_dict['no_intervention_s'] = ( intervention_state_df.S[3]).tolist()
             scenario_dict['no_intervention_r'] = ( intervention_state_df.R1[3]).tolist()
             scenario_dict['no_intervention_c'] = ( intervention_state_df.C[3]).tolist()
+            scenario_dict['no_intervention_ca'] = ( intervention_state_df.CA[3]).tolist()
+            
             
             #scenario_dict['no_intervention_r']=[x + y for (x, y) in zip(( intervention_state_df.R1[3]).tolist(),( intervention_state_df.R2[3]).tolist())]
             #state_list=intervention_state_df.C[3]
             #scenario_dict['no_intervention_c_diff']=[state_list[i + 1] - state_list[i] for i in range(len(state_list)-1)] 
             scenario_dict['no_intervention_c_diff'] = [j - i for i, j in zip((intervention_state_df.C[3]).tolist()[:-1], (intervention_state_df.C[3]).tolist()[1:])]        # rate of change(diff) of C value
+            scenario_dict['no_intervention_ca_diff'] = [j - i for i, j in zip((intervention_state_df.CA[3]).tolist()[:-1], (intervention_state_df.CA[3]).tolist()[1:])]  
+            
+            
             if all_end_index[2]== all_end_index[3]:
                 scenario_dict['no_intervention_c_diff'][0:all_end_index[2]]=list(filter(lambda x : x > 0, scenario_dict['no_intervention_c_diff'][0:all_end_index[2]])) #keep diff vaue is 3rd wave not occur
+                scenario_dict['no_intervention_ca_diff'][0:all_end_index[2]]=list(filter(lambda x : x > 0, scenario_dict['no_intervention_ca_diff'][0:all_end_index[2]]))
             else:    
                 scenario_dict['no_intervention_c_diff']=list(filter(lambda x : x > 0, scenario_dict['no_intervention_c_diff']))   # remove negative value after diff
+                scenario_dict['no_intervention_ca_diff']=list(filter(lambda x : x > 0, scenario_dict['no_intervention_ca_diff'])) 
+            
+            scenario_dict['no_intervention_c_ca_diff'] = [j + i for i, j in zip(scenario_dict['no_intervention_c_diff'],scenario_dict['no_intervention_ca_diff'])]  #for plot of systomatic + asymtomatic
             
             #----------------------Hospital system preparedness without vaccination----------------------------------------------------------------------------------
             scenario_dict['no_intervention_c1_diff'] = [j - i for i, j in zip((intervention_state_df.C[0]).tolist()[:-1], (intervention_state_df.C[0]).tolist()[1:])] # diff value
             scenario_dict['no_intervention_c2_diff'] = [j - i for i, j in zip((intervention_state_df.C[1]).tolist()[:-1], (intervention_state_df.C[1]).tolist()[1:])] # diff value
             scenario_dict['no_intervention_c3_diff'] = [j - i for i, j in zip((intervention_state_df.C[2]).tolist()[:-1], (intervention_state_df.C[2]).tolist()[1:])] # diff value
             
+            scenario_dict['Hospital_c']=[((j*preparedness_precent[0])+(i*preparedness_precent[1])+(k+preparedness_precent[2])) for i, j, k in zip(scenario_dict['no_intervention_c1_diff'],scenario_dict['no_intervention_c2_diff'],scenario_dict['no_intervention_c3_diff'])]
+            
+            
             if all_end_index[2]!= all_end_index[3]:
+                
+                i=0
+                for h in scenario_dict['Hospital_c']:                    
+                    if i<all_end_index[2]:
+                        scenario_dict['Hospital_c'][i]=h
+                    else:
+                        scenario_dict['Hospital_c'][i]=h*self.proportionHospital
+                    i=i+1
                 
                 #Age group wise hospitalization count
                 # preparedness_list.append((max(list(scenario_dict['no_intervention_c1_diff'][all_end_index[2]:all_end_index[3]]))*preparedness_precent[0])*10)
@@ -79,25 +99,25 @@ class CovidApp:
                 for i in range (0,6):                     
                     preparedness_list.append(preparedness_list[i]*preparedness_precent[i+3])
                 
-                if self.proportionHospital!=1 or self.proportionOxygen!=1:
-                    # print("preparedness_list",preparedness_list)
+                # if self.proportionHospital!=1 or self.proportionOxygen!=1:
+                #     print("preparedness_list",preparedness_list)
                     # print("self.proportionHospital",type(self.proportionHospital))
-                    if self.homeCare==None:
-                        # print('No home care')
-                        for i in range(0,3):
-                            preparedness_list[i]=preparedness_list[i]*self.proportionHospital
-                            preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen
-                            preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen
-                            
-                    if self.homeCare!=None:  
-                        # print('home care')
-                        for i in range(0,3):
-                            preparedness_list[i]=preparedness_list[i+3]     #updating first 3 element i.e hospitalization with next element i.e oxygen.
-                            # print(preparedness_list)
-                            preparedness_list[i]=preparedness_list[i]*self.proportionOxygen*(1+self.percentIncOxygenhomeCare)
-                            # print(preparedness_list)
-                            preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen
-                            preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen   
+                if self.homeCare==None:
+                    print('No home care')
+                    for i in range(0,3):
+                        preparedness_list[i]=preparedness_list[i]*self.proportionHospital
+                        preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen*self.proportionHospital
+                        preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen*self.proportionHospital
+                        
+                if self.homeCare!=None:  
+                    print('home care')
+                    for i in range(0,3):
+                        preparedness_list[i]=preparedness_list[i+3]     #updating first 3 element i.e hospitalization with next element i.e oxygen.
+                        # print(preparedness_list)
+                        preparedness_list[i]=preparedness_list[i]*self.proportionOxygen*self.proportionHospital*(1+self.percentIncOxygenhomeCare)
+                        # print(preparedness_list)
+                        preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen*self.proportionHospital
+                        preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen*self.proportionHospital   
 
                 #Total count of each requirement
                 for i in range (0,3):
@@ -111,7 +131,7 @@ class CovidApp:
       
          ################### Vaccination- get S,R, C_diff component to dictionary ###############################################
         
-        if len(intervention_state_df.columns)>9: 
+        if len(intervention_state_df.columns)>10: 
             scenario_dict['t'] = (intervention_state_df.t[3]).tolist()
             scenario_dict['no_intervention_s'] = ( intervention_state_df.S[3]).tolist()
             scenario_dict['no_intervention_r'] = ( intervention_state_df.R1[3]).tolist()
@@ -182,23 +202,23 @@ class CovidApp:
                 #calculating ct i.e c+cv requirment
                 preparedness_list = [x + y for (x, y) in zip(preparedness_temp_C,preparedness_temp_Cv)]
 
-                if self.proportionHospital!=1 or self.proportionOxygen!=1:
+                # if self.proportionHospital!=1 or self.proportionOxygen!=1:
                     
-                    if self.homeCare==None:
-                        # print('No home care')
-                        for i in range(0,3):
-                            preparedness_list[i]=preparedness_list[i]*self.proportionHospital
-                            preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen
-                            preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen
-                            
-                    if self.homeCare!=None: 
-                        # print('home care')
-                        for i in range(0,3):
-                            #print(preparedness_list)                            
-                            preparedness_list[i]=preparedness_list[i+3]     #updating first 3 element i.e hospitalization with next element i.e oxygen.
-                            preparedness_list[i]=preparedness_list[i]*self.proportionOxygen*(1+self.percentIncOxygenhomeCare)
-                            preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen
-                            preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen
+                if self.homeCare==None:
+                    print('No home care')
+                    for i in range(0,3):
+                        preparedness_list[i]=preparedness_list[i]*self.proportionHospital
+                        preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen*self.proportionHospital
+                        preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen*self.proportionHospital
+                        
+                if self.homeCare!=None: 
+                    print('home care')
+                    for i in range(0,3):
+                        #print(preparedness_list)                            
+                        preparedness_list[i]=preparedness_list[i+3]     #updating first 3 element i.e hospitalization with next element i.e oxygen.
+                        preparedness_list[i]=preparedness_list[i]*self.proportionOxygen*self.proportionHospital*(1+self.percentIncOxygenhomeCare)
+                        preparedness_list[i+3]=preparedness_list[i+3]*self.proportionOxygen*self.proportionHospital
+                        preparedness_list[i+6]=preparedness_list[i+6]*self.proportionOxygen*self.proportionHospital
 
                 # Calculating total for each requirement
                 for i in range (0,3):
@@ -212,7 +232,7 @@ class CovidApp:
             preparedness_list=[round(item,2) for item in preparedness_list] 
             
         #################################### Embedding dates array on x Axis #################################### 
-        if len(intervention_state_df.columns)<=9:
+        if len(intervention_state_df.columns)<=10:
             start_date_x_axis=FirstPeakDate - datetime.timedelta(days=int(FWP_index))       
             date_xaxis = []
             
@@ -221,7 +241,7 @@ class CovidApp:
             
             scenario_dict['date'] = date_xaxis
         
-        elif len(intervention_state_df.columns)>9:
+        elif len(intervention_state_df.columns)>10:
             start_date_x_axis=FirstPeakDate - datetime.timedelta(days=int(FWP_index))        
             date_xaxis = []
             
@@ -401,7 +421,8 @@ class SirModel:
     r = 1.0      # Rate of developing symptoms
     k = 5/6      # Relative infectiousness of asymptomatic vs symptomatic infection
     p_sym =0.5   # Proportion developing symptoms  
-    p_sym_TW=0.5
+    p_sym_TW=0.2
+    p_sym_days=60
     d=1/240      # Delay rate from R1 to R2    
     #mu = np.array([0.0002, 0.002, 0.024])  #Previous Mortality rate for severe cases 
     mu = np.array([0.0002, 0.0025, 0.0189])  #latest value Mortality rate for severe cases  
@@ -422,11 +443,11 @@ class SirModel:
         
         self.N = np.array([0,0,0]) if N is None else N               # Population
         
-        U1,E1,A1,P1,S1,R11,R21,C1 = N[0], 0, 0, 0, 0, 0, 0 ,0        # initial conditions vector age group 2
-        U2,E2,A2,P2,S2,R12,R22,C2 = N[1]-20, 0, 0, 0, 20 , 0, 0, 0  # Initial conditions vector age group 2
-        U3,E3,A3,P3,S3,R13,R23,C3 = N[2], 0, 0, 0, 0, 0, 0 , 0       # Initial conditions vector age group 3
+        U1,E1,A1,P1,S1,R11,R21,C1,CA1 = N[0], 0, 0, 0, 0, 0, 0 ,0, 0        # initial conditions vector age group 2
+        U2,E2,A2,P2,S2,R12,R22,C2,CA2 = N[1]-20, 0, 0, 0, 20 , 0, 0, 0, 0  # Initial conditions vector age group 2
+        U3,E3,A3,P3,S3,R13,R23,C3,CA3 = N[2], 0, 0, 0, 0, 0, 0 , 0, 0       # Initial conditions vector age group 3
         
-        self.y0 = np.array([U1,E1,A1,P1,S1,R11,R21,C1,U2,E2,A2,P2,S2,R12,R22,C2,U3,E3,A3,P3,S3,R13,R23,C3])
+        self.y0 = np.array([U1,E1,A1,P1,S1,R11,R21,C1,CA1,U2,E2,A2,P2,S2,R12,R22,C2,CA2,U3,E3,A3,P3,S3,R13,R23,C3,CA3])
         
         self.SecondPeakDate=SecondPeakDate
         self.Wa=AverageDurationOfWanning
@@ -538,9 +559,9 @@ class SirModel:
         
     ############################## Derivative function  #######################################################################
         
-    def deriv (self,y0, t, beta, N, eta, gamma, p_sym, mu, r, Wa, d, L_flag=None):        
+    def deriv (self,y0, t, beta, N, eta, gamma, P_sym, mu, r, Wa, d, L_flag=None, P_sym_flag=None):        
               
-        state_arr = np.reshape(y0, (-1,8)) 
+        state_arr = np.reshape(y0, (-1,9)) 
         
         y0_final= []
         
@@ -556,10 +577,17 @@ class SirModel:
             Betac=self.finterp_phase_3(t)
             Wac=Wa
             
+        
+        if P_sym_flag==None:
+            p_sym=P_sym
             
+        elif P_sym_flag==1:                        # p_sys value (decrease p_sys) 
+            p_sym=self.finterp_p_sym(t)
+            
+                     
         for i in range(3):
 
-            U, E, A, P, S, R1, R2,C = state_arr[i]            
+            U, E, A, P, S, R1, R2, C, CA1 = state_arr[i]            
 
             __lambda = Betac * sum(
                 (
@@ -584,14 +612,16 @@ class SirModel:
             
             dCdt=   r*P 
             
-            y0_final.extend(np.array([dUdt, dEdt, dAdt, dPdt,dSdt, dR1dt, dR2dt,dCdt])) 
+            dCAdt=  (eta * (1-p_sym) * E)
+            
+            y0_final.extend(np.array([dUdt, dEdt, dAdt, dPdt,dSdt, dR1dt, dR2dt,dCdt,dCAdt])) 
                   
         return y0_final
     
     
     ############################## Vaccination Derivative function ####################################################
         
-    def deriv_vacc (self,y0, t, beta, N, eta, gamma, p_sym, mu, r, Wa, d,R_vi,C1_v,C2_v,L_flag=None):        
+    def deriv_vacc (self,y0, t, beta, N, eta, gamma, P_sym, mu, r, Wa, d,R_vi,C1_v,C2_v,L_flag=None, P_sym_flag=None):        
              
         state_arr = np.reshape(y0, (-1,17)) 
        
@@ -609,7 +639,13 @@ class SirModel:
             Betac=self.finterp_phase_3(t)   # beta value for lockdown phase 2 (increase beta) 
             Wac=Wa
             
+        if P_sym_flag==None:
+            p_sym=P_sym
+            
+        elif P_sym_flag==1:                        # p_sys value (decrease p_sys) 
+            p_sym=self.finterp_p_sym(t)    
        
+        
         for i in range(3):
             
             if i==0:
@@ -675,9 +711,9 @@ class SirModel:
         
         if vaccflag==None:
         
-            for i in range(0, state_arr.shape[0], 8):                                
+            for i in range(0, state_arr.shape[0], 9):                                
                 state_dict = {'U':state_arr[i],'E':state_arr[i+1],'A':state_arr[i+2],'P':state_arr[i+3],
-                              'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7]}                     
+                              'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7], 'CA':state_arr[i+7]}                     
                 state_df = state_df.append(state_dict,ignore_index=True)
             state_df.loc[3] = state_df.loc[0] + state_df.loc[1] + state_df.loc[2] 
            
@@ -707,43 +743,7 @@ class SirModel:
             
         return state_df,Peak_value,Peak_index
     
-    #################################Second wave end limit##############################################################
-    
-    # def SecondWaveMinIndex (self,state_arr,vaccflag=None):
-    
-    #     state_df = pd.DataFrame()  
-        
-    #     if vaccflag==None:
-        
-    #         for i in range(0, state_arr.shape[0], 8):
-                            
-    #             state_dict = {'U':state_arr[i],'E':state_arr[i+1],'A':state_arr[i+2],'P':state_arr[i+3],
-    #                           'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7]} 
-                
-    #             state_df = state_df.append(state_dict,ignore_index=True)
-                
-    #     elif vaccflag==1:
-            
-    #         for i in range(0, state_arr.shape[0], 17):
-                            
-    #             state_dict = {'U':state_arr[i],'E':state_arr[i+1],'A':state_arr[i+2],'P':state_arr[i+3],
-    #                           'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7],
-    #                           'Uv':state_arr[i+8],'Ev':state_arr[i+9],'Av':state_arr[i+10],'Pv':state_arr[i+11],
-    #                           'Sv':state_arr[i+12],'R1v':state_arr[i+13],'R2v':state_arr[i+14], 'Cv':state_arr[i+15],
-    #                           'Ct':state_arr[i+16]} 
-                
-    #             state_df = state_df.append(state_dict,ignore_index=True)
-        
-    #     state_df.loc[3] = state_df.loc[0] + state_df.loc[1] + state_df.loc[2] 
-    
-    #     state_list=state_df.C[3]
-        
-    #     state_list_Cdiff=[state_list[i + 1] - state_list[i] for i in range(len(state_list)-1)] #calculate Cdiff
-        
-    #     state_Cdiff_min_index= state_list_Cdiff.index(min(state_list_Cdiff)) 
-        
-    #     return state_Cdiff_min_index
-    
+      
         
     ############################### Third wave end limit ##############################################################
     
@@ -753,10 +753,10 @@ class SirModel:
         
         if vaccflag==None:
         
-            for i in range(0, state_arr.shape[0], 8):
+            for i in range(0, state_arr.shape[0], 9):
                             
                 state_dict = {'U':state_arr[i],'E':state_arr[i+1],'A':state_arr[i+2],'P':state_arr[i+3],
-                              'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7]} 
+                              'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7], 'CA':state_arr[i+8]} 
                 
                 state_df = state_df.append(state_dict,ignore_index=True)
                 
@@ -1040,14 +1040,15 @@ class SirModel:
                 
                 if self.ThirdWaveImmuneEscape!=None:
                 
-                    state_arr_3_1 = np.reshape(y3_1, (-1,8))           
+                    state_arr_3_1 = np.reshape(y3_1, (-1,9))           
                 
                     for i in [0,1,2]:
                             state_arr_3_1[i][0]=state_arr_3_1[i][0]+((state_arr_3_1[i][5])+(state_arr_3_1[i][6]))*self.ThirdWaveImmuneEscape  #U
                             state_arr_3_1[i][5]=(state_arr_3_1[i][5])*(1-self.ThirdWaveImmuneEscape)                #R1
                             state_arr_3_1[i][6]=(state_arr_3_1[i][6])*(1-self.ThirdWaveImmuneEscape)                #R2
                             
-                    y3_2 = np.array((np.reshape(state_arr_3_1, (-1,24)))[0]) 
+                    y3_2 = np.array((np.reshape(state_arr_3_1, (-1,27)))[0])                     
+                    
                     
                 else:
                     
@@ -1057,8 +1058,14 @@ class SirModel:
                 
                 t3_2=np.arange(TWEm_Start_index,TWE_index_test,1)
                 
+                #Decreasing p_sym gradually
+                p_sym1_TW=(np.linspace(0.5,0.2,self.p_sym_days)).tolist()                
+                p_sym1_TW.extend([self.p_sym_TW]*(TWE_index_test-TWEm_Start_index-self.p_sym_days))
+                p_sym_t=np.arange(TWEm_Start_index, TWE_index_test,1)                
+                self.finterp_p_sym = interp1d(p_sym_t, p_sym1_TW,fill_value='extrapolate') 
+                
                 ret3_2 = odeint(self.deriv, y3_2, t3_2, args=(self.Beta_4,self.N, self.eta, self.gamma, 
-                                                                self.p_sym, self.mu, self.r, self.Wa, self.d)) 
+                                                                None, self.mu, self.r, self.Wa, self.d,None,1)) 
                 
                 ret3 = np.concatenate((ret3_1,ret3_2[1:]), axis=0)
                 
@@ -1069,14 +1076,16 @@ class SirModel:
                 
                 t33=np.arange(SW_LR_end,TWE_index_test,1)
                 
-                ret3 = odeint(self.deriv, y2_3, t33, args=(self.Beta_3,self.N, self.eta, self.gamma, 
-                                                               self.p_sym_TW, self.mu, self.r, self.Wa, self.d)) 
+                ret3 = odeint(self.deriv, y2_3, t33, args=(self.Beta_4,self.N, self.eta, self.gamma, 
+                                                               self.p_sym, self.mu, self.r, self.Wa, self.d)) 
                 
                 
             
             # getting duration of third wave
             
             duration_TW=self.ThirdWaveEndlimit(ret3.T,None,self.Wa)
+            
+            
             
             if duration_TW<5:
                 
@@ -1100,14 +1109,21 @@ class SirModel:
                 
                 TWE_index_final=SW_LR_end + duration_TW
                 
-                all_end_index=[0,self.FWE_index,SW_LR_end,TWE_index_final]
+                if self.ThirdWaveImmuneEscape!=None or self.R3_percent!=None:
+                    
+                    all_end_index=[0,self.FWE_index,TWEm_Start_index,TWE_index_final]
+                    
+                else:              
+                    all_end_index=[0,self.FWE_index,SW_LR_end,TWE_index_final]
+                
+            print(all_end_index)
             
             state_arr = result.T
                 
-            for i in range(0, state_arr.shape[0], 8):                
+            for i in range(0, state_arr.shape[0], 9):                
                             
                 state_dict = {'U':state_arr[i],'E':state_arr[i+1],'A':state_arr[i+2],'P':state_arr[i+3],
-                                'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7]} 
+                                'S':state_arr[i+4],'R1':state_arr[i+5],'R2':state_arr[i+6], 'C':state_arr[i+7], 'CA':state_arr[i+8]} 
                 
                 state_df = state_df.append(state_dict,ignore_index=True)
             
@@ -1251,12 +1267,18 @@ class SirModel:
                         
                         y3_2=np.array(ret3_1[-1,:])
                      
-                    TWE_index_test= TWEm_Start_index + 1000
+                    TWE_index_test= TWEm_Start_index + 1000   
                     
                     t3_2=np.arange(TWEm_Start_index,TWE_index_test,1)
                     
+                    #Decreasing p_sym gradually
+                    p_sym1_TW=(np.linspace(0.5,0.2,self.p_sym_days)).tolist()                
+                    p_sym1_TW.extend([self.p_sym_TW]*(TWE_index_test-TWEm_Start_index-self.p_sym_days))
+                    p_sym_t=np.arange(TWEm_Start_index, TWE_index_test,1)                
+                    self.finterp_p_sym = interp1d(p_sym_t, p_sym1_TW,fill_value='extrapolate') 
+                    
                     ret3_2 = odeint(self.deriv_vacc, y3_2, t3_2, args=(self.Beta_4,self.N, self.eta, self.gamma, 
-                                                                    self.p_sym_TW, self.mu, self.r, self.Wa, self.d,vaccRate,self.C1_v,self.C2_v)) 
+                                                                   None, self.mu, self.r, self.Wa, self.d,vaccRate,self.C1_v,self.C2_v,None,1)) 
                     
                     ret3 = np.concatenate((ret3_1,ret3_2[1:]), axis=0)
                     
@@ -1267,7 +1289,7 @@ class SirModel:
                     
                     t33=np.arange(SW_LR_end,TWE_index_test,1)
                     
-                    ret3 = odeint(self.deriv_vacc, y2_3, t33, args=(self.Beta_3,self.N, self.eta, self.gamma, 
+                    ret3 = odeint(self.deriv_vacc, y2_3, t33, args=(self.Beta_4,self.N, self.eta, self.gamma, 
                                                                    self.p_sym, self.mu, self.r, self.Wa, self.d,vaccRate,self.C1_v,self.C2_v)) 
                     
                 
@@ -1296,6 +1318,14 @@ class SirModel:
                     
                     TWE_index_final=SW_LR_end + duration_TW
                     
+                    all_end_index=[0,self.FWE_index,TWEm_Start_index,TWE_index_final]
+                    
+                    
+                if self.ThirdWaveImmuneEscape!=None or self.R3_percent!=None:
+                    
+                    all_end_index=[0,self.FWE_index,TWEm_Start_index,TWE_index_final]
+                    
+                else:              
                     all_end_index=[0,self.FWE_index,SW_LR_end,TWE_index_final]
                     
                     
